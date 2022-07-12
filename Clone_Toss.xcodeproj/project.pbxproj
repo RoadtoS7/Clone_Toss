@@ -19,6 +19,10 @@
 		2E74FDF4287C60ED0052C137 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDF3287C60ED0052C137 /* HomeViewController.swift */; };
 		2E74FDF6287C670C0052C137 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDF5287C670C0052C137 /* ViewController.swift */; };
 		2E74FDF9287D928D0052C137 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDF8287D928D0052C137 /* Expense.swift */; };
+		2E74FDFE287DB3C70052C137 /* BankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDFD287DB3C70052C137 /* BankCell.swift */; };
+		2E74FE00287DB3D70052C137 /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDFF287DB3D70052C137 /* AssetCell.swift */; };
+		2E74FE02287DB6610052C137 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FE01287DB6610052C137 /* Bank.swift */; };
+		2E74FE04287DB8CA0052C137 /* Promotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FE03287DB8CA0052C137 /* Promotion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,10 @@
 		2E74FDF3287C60ED0052C137 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2E74FDF5287C670C0052C137 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2E74FDF8287D928D0052C137 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		2E74FDFD287DB3C70052C137 /* BankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankCell.swift; sourceTree = "<group>"; };
+		2E74FDFF287DB3D70052C137 /* AssetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
+		2E74FE01287DB6610052C137 /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
+		2E74FE03287DB8CA0052C137 /* Promotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promotion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +113,8 @@
 		2E74FDC2287C5DEB0052C137 /* Clone_Toss */ = {
 			isa = PBXGroup;
 			children = (
-				2E74FDFA287DA6E20052C137 /* Home */,
 				2E74FDC3287C5DEB0052C137 /* AppDelegate.swift */,
+				2E74FDFA287DA6E20052C137 /* Home */,
 				2E74FDC5287C5DEB0052C137 /* SceneDelegate.swift */,
 				2E74FDC7287C5DEB0052C137 /* TabBarController.swift */,
 				2E74FDC9287C5DEB0052C137 /* Main.storyboard */,
@@ -139,6 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				2E74FDF8287D928D0052C137 /* Expense.swift */,
+				2E74FE01287DB6610052C137 /* Bank.swift */,
+				2E74FE03287DB8CA0052C137 /* Promotion.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -147,6 +157,8 @@
 			isa = PBXGroup;
 			children = (
 				2E74FDF3287C60ED0052C137 /* HomeViewController.swift */,
+				2E74FDFD287DB3C70052C137 /* BankCell.swift */,
+				2E74FDFF287DB3D70052C137 /* AssetCell.swift */,
 				2E74FDF7287D925D0052C137 /* Model */,
 			);
 			path = Home;
@@ -285,8 +297,12 @@
 			files = (
 				2E74FDF9287D928D0052C137 /* Expense.swift in Sources */,
 				2E74FDF6287C670C0052C137 /* ViewController.swift in Sources */,
+				2E74FE00287DB3D70052C137 /* AssetCell.swift in Sources */,
 				2E74FDC8287C5DEB0052C137 /* TabBarController.swift in Sources */,
+				2E74FDFE287DB3C70052C137 /* BankCell.swift in Sources */,
 				2E74FDC4287C5DEB0052C137 /* AppDelegate.swift in Sources */,
+				2E74FE02287DB6610052C137 /* Bank.swift in Sources */,
+				2E74FE04287DB8CA0052C137 /* Promotion.swift in Sources */,
 				2E74FDC6287C5DEB0052C137 /* SceneDelegate.swift in Sources */,
 				2E74FDF4287C60ED0052C137 /* HomeViewController.swift in Sources */,
 			);

@@ -7,65 +7,33 @@
 
 import UIKit
 
-enum SectionType: Int, CaseIterable {
-    case bank = 0
-    case asset = 1
-    case expense = 2
-    case promotion = 3
+enum SectionKind: Int, CaseIterable {
+    case bank
+    case asset
+    case expense
+    case promotion
+    
+    var columnCount: Int {
+        switch self {
+        case .bank, .asset, .expense: return 1
+        case .promotion: return 1
+        }
+    }
 }
 
+let allData = [[Bank.value]] + [Asset.value] + [Promotion.value]
 class HomeViewController: UINavigationController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
     typealias SnapShot = NSDiffableDataSourceSnapshot<Int, String>
     
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: self.view.bounds, collectionViewLayout: self.basicListLayout())
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        return view
-    }()
+    private var collectionView: UICollectionView!
+    private var dataSource: DataSource!
     
-    private let cellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell, indexPath: IndexPath, itemIdentifier: String) in
-        
-        let asset = Asset.value[indexPath.row]
-        
-        var contentConfig = cell.defaultContentConfiguration()
-        contentConfig.text = asset.name
-        contentConfig.textProperties.color = .black
-        contentConfig.secondaryText = "\(asset.value)"
-        contentConfig.image = UIImage(systemName: "dollarsign.circle")
-        cell.contentConfiguration = contentConfig
-        
-        var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
-        backgroundConfig.backgroundColor = .lightGray
-        cell.backgroundConfiguration = backgroundConfig
-    }
-    
-    func basicListLayout() -> UICollectionViewCompositionalLayout {
-        var listConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
-        listConfiguration.showsSeparators = false
-        listConfiguration.backgroundColor = .clear
-        
-        return UICollectionViewCompositionalLayout.list(using: listConfiguration)
-    }
-    
-    private lazy var dataSource: DataSource = .init(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-        return collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration, for: indexPath, item: itemIdentifier)
-    }
-
     init() {
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .white
         self.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"), tag: 0)
-        
-        collectionView.dataSource = dataSource
-        
-        var snapShot = SnapShot()
-        snapShot.appendSections([0])
-        snapShot.appendItems(Asset.value.map({ $0.name }))
-        dataSource.applySnapshotUsingReloadData(snapShot)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -74,8 +42,16 @@ class HomeViewController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureHierachy()
+        configureDataSource()
+    }
+}
+
+extension HomeViewController {
+    private func configureHierachy() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         view.addSubview(collectionView)
+        
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -84,35 +60,111 @@ class HomeViewController: UINavigationController {
         ])
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
-
-extension HomeViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return SectionType.allCases.count
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
+            guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
+            let columns = sectionKind.columnCount
+            
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .fractionalHeight(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
+            
+            // 무엇을 기준으로 0.2인가?
+            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.absolute(44) : NSCollectionLayoutDimension.fractionalWidth(0.2)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
+            let group = NSCollectionLayoutGroup(layoutSize: groupSize)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
+            return section
+        }
+        return layout
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 25
+    private func configureDataSource() {
+        let bankCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                        indexPath: IndexPath,
+                                                                        itemIdentifier: String)  in
+            var config = cell.defaultContentConfiguration()
+            config.text = Bank.value.name
+            config.textProperties.color = .black
+            
+            cell.contentConfiguration = config
+            cell.accessories = [.disclosureIndicator()]
+        }
+        
+        let assetCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                         indexPath: IndexPath,
+                                                                         itemIdentifier: String)  in
+            let asset = Asset.value[indexPath.row]
+            
+            var config = cell.defaultContentConfiguration()
+            config.text = asset.name
+            config.textProperties.color = .black
+            
+            config.secondaryText = String(format: "%d원", asset.value)
+            
+            cell.contentConfiguration = config
+            cell.accessories = [.disclosureIndicator()]
+        }
+        
+        let expenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                           indexPath: IndexPath,
+                                                                           itemIdentifier: String)  in
+            let asset = Asset.value[indexPath.row]
+            
+            var config = cell.defaultContentConfiguration()
+            config.text = asset.name
+            config.textProperties.color = .black
+            
+            config.secondaryText = String(format: "%d원", asset.value)
+            
+            cell.contentConfiguration = config
+            cell.accessories = [.disclosureIndicator()]
+        }
+        
+        let promotionCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                             indexPath: IndexPath,
+                                                                             itemIdentifier: String)  in
+            let promotion = Promotion.value[indexPath.row]
+            
+            var config = cell.defaultContentConfiguration()
+            config.text = promotion.category
+            config.secondaryText = promotion.title
+            
+            guard let imageName = promotion.imageName else { return }
+            config.image = UIImage(systemName: imageName)
+        }
+        
+        dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            let sectionKind = SectionKind(rawValue: indexPath.section)!
+            switch sectionKind {
+            case .bank:
+                return collectionView.dequeueConfiguredReusableCell(using: bankCellRegistration, for: indexPath, item: itemIdentifier)
+                
+            case .asset:
+                return collectionView.dequeueConfiguredReusableCell(using: assetCellRegistration, for: indexPath, item: itemIdentifier)
+                
+            case .expense:
+                return collectionView.dequeueConfiguredReusableCell(using: expenseCellRegistration, for: indexPath, item: itemIdentifier)
+                
+            case .promotion:
+                return collectionView.dequeueConfiguredReusableCell(using: promotionCellRegistration, for: indexPath, item: itemIdentifier)
+            }
+        })
+        
+        
+        var snapShot = SnapShot()
+        
+        let sectionIds = SectionKind.allCases.map { $0.rawValue }
+        snapShot.appendSections(sectionIds)
+        
+        snapShot.appendItems([Bank.value.id], toSection: 0)
+        snapShot.appendItems(Asset.value.map({ $0.id }), toSection: 1)
+        snapShot.appendItems(Expense.value.map({ $0.id }), toSection: 2)
+        snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: 3)
+        
+        dataSource.apply(snapShot, animatingDifferences: false)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
-        cell.backgroundColor = .green
-        return cell
-    }
-}
-
-extension HomeViewController: UICollectionViewDelegate {
-    
 }
