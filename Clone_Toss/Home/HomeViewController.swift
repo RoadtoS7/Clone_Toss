@@ -102,11 +102,12 @@ extension HomeViewController {
             var config = cell.defaultContentConfiguration()
             config.text = asset.name
             config.textProperties.color = .black
-            
             config.secondaryText = String(format: "%d원", asset.value)
             
             cell.contentConfiguration = config
-            cell.accessories = [.disclosureIndicator()]
+            
+            var sendMoneyButtonConfig = self.sendMoneyButtonConfiguration(using: asset)
+            cell.accessories = [.customView(configuration: self.sendMoneyButtonConfiguration(using: asset))]
         }
         
         let expenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
@@ -117,7 +118,6 @@ extension HomeViewController {
             var config = cell.defaultContentConfiguration()
             config.text = asset.name
             config.textProperties.color = .black
-            
             config.secondaryText = String(format: "%d원", asset.value)
             
             cell.contentConfiguration = config
@@ -166,5 +166,26 @@ extension HomeViewController {
         snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: 3)
         
         dataSource.apply(snapShot, animatingDifferences: false)
+    }
+    
+    private func sendMoneyButtonConfiguration(using asset: Asset) -> UICellAccessory.CustomViewConfiguration {
+        let button = UIButton()
+        button.setTitle("송금", for: .normal)
+        button.setTitleColor(.lightGray, for: .normal)
+        
+        var buttonConfig = UIButton.Configuration.gray()
+        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
+        buttonConfig.titleAlignment = .center
+        buttonConfig.cornerStyle = .medium
+        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
+            var attrContainer = attrContainer
+            attrContainer.foregroundColor = UIColor.lightGray
+            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
+            return attrContainer
+        })
+        
+        button.configuration = buttonConfig
+        
+        return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
     }
 }
