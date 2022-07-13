@@ -50,6 +50,7 @@ class HomeViewController: UINavigationController {
 extension HomeViewController {
     private func configureHierachy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
