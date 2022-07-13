@@ -73,7 +73,7 @@ extension HomeViewController {
             // 무엇을 기준으로 0.2인가?
             let groupHeight = columns == 1 ? NSCollectionLayoutDimension.absolute(44) : NSCollectionLayoutDimension.fractionalWidth(0.2)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
-            let group = NSCollectionLayoutGroup(layoutSize: groupSize)
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionKind.columnCount)
             
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
