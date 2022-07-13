@@ -21,7 +21,6 @@ enum SectionKind: Int, CaseIterable {
     }
 }
 
-let allData = [[Bank.value]] + [Asset.value] + [Promotion.value]
 class HomeViewController: UINavigationController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
     typealias SnapShot = NSDiffableDataSourceSnapshot<Int, String>
