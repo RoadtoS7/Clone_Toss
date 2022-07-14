@@ -76,6 +76,23 @@ extension HomeViewController {
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionKind.columnCount)
             
             let section = NSCollectionLayoutSection(group: group)
+            
+            
+            if sectionKind == .asset {
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: AssetHeader.elementKind, alignment: .topLeading)
+                section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing:20)
+                section.boundarySupplementaryItems = [sectionHeader]
+                return section
+            }
+            if sectionKind == .expense {
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: ExpenseHeader.elementKind, alignment: .topLeading)
+                section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing:20)
+                section.boundarySupplementaryItems = [sectionHeader]
+                return section
+            }
+            
             section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
             return section
         }
@@ -102,17 +119,43 @@ extension HomeViewController {
             var config = cell.defaultContentConfiguration()
             config.text = asset.name
             config.textProperties.color = .black
+            config.textProperties.font = .systemFont(ofSize: 13)
             config.secondaryText = String(format: "%d원", asset.value)
+            config.secondaryTextProperties.font = .systemFont(ofSize: 15)
             
             cell.contentConfiguration = config
             
-            var sendMoneyButtonConfig = self.sendMoneyButtonConfiguration(using: asset)
-            cell.accessories = [.customView(configuration: self.sendMoneyButtonConfiguration(using: asset))]
+            cell.accessories = [.customView(configuration: self.sendMoneyButtonConfig(using: asset))]
         }
         
-        let expenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                           indexPath: IndexPath,
-                                                                           itemIdentifier: String)  in
+        
+        let assetHeaderRegistration = UICollectionView.SupplementaryRegistration<AssetHeader>(elementKind: AssetHeader.elementKind) { supplementaryView, elementKind, indexPath in
+            supplementaryView.label.text = "자산"
+        }
+        
+        let expenseHeaderRegistration = UICollectionView.SupplementaryRegistration<ExpenseHeader>(elementKind: ExpenseHeader.elementKind) { supplementaryView, elementKind, indexPath in
+            supplementaryView.label.text = "소비"
+        }
+        
+        let monthExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                                indexPath: IndexPath,
+                                                                                itemIdentifier: String)  in
+            let asset = Asset.value[indexPath.row]
+            
+            var config = cell.defaultContentConfiguration()
+            config.text = asset.name
+            config.textProperties.color = .black
+            config.textProperties.font = .systemFont(ofSize: 13)
+            config.secondaryText = String(format: "%d원", asset.value)
+            config.secondaryTextProperties.font = .systemFont(ofSize: 15)
+            
+            cell.contentConfiguration = config
+            cell.accessories = [.customView(configuration: self.showExpenseDetailButtonConfig())]
+        }
+        
+        let cardExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
+                                                                               indexPath: IndexPath,
+                                                                               itemIdentifier: String)  in
             let asset = Asset.value[indexPath.row]
             
             var config = cell.defaultContentConfiguration()
@@ -123,6 +166,7 @@ extension HomeViewController {
             cell.contentConfiguration = config
             cell.accessories = [.disclosureIndicator()]
         }
+        
         
         let promotionCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
                                                                              indexPath: IndexPath,
@@ -147,13 +191,22 @@ extension HomeViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: assetCellRegistration, for: indexPath, item: itemIdentifier)
                 
             case .expense:
-                return collectionView.dequeueConfiguredReusableCell(using: expenseCellRegistration, for: indexPath, item: itemIdentifier)
+                return collectionView.dequeueConfiguredReusableCell(using: indexPath.row == .zero
+                                                                    ? monthExpenseCellRegistration: cardExpenseCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: itemIdentifier)
                 
             case .promotion:
                 return collectionView.dequeueConfiguredReusableCell(using: promotionCellRegistration, for: indexPath, item: itemIdentifier)
             }
         })
         
+        dataSource.supplementaryViewProvider = { (view, kind, indexPath) in
+            if kind == AssetHeader.elementKind {
+                return self.collectionView.dequeueConfiguredReusableSupplementary(using: assetHeaderRegistration, for: indexPath)
+            }
+            return self.collectionView.dequeueConfiguredReusableSupplementary(using: expenseHeaderRegistration, for: indexPath)
+        }
         
         var snapShot = SnapShot()
         
@@ -168,9 +221,30 @@ extension HomeViewController {
         dataSource.apply(snapShot, animatingDifferences: false)
     }
     
-    private func sendMoneyButtonConfiguration(using asset: Asset) -> UICellAccessory.CustomViewConfiguration {
+    private func sendMoneyButtonConfig(using asset: Asset) -> UICellAccessory.CustomViewConfiguration {
         let button = UIButton()
         button.setTitle("송금", for: .normal)
+        button.setTitleColor(.lightGray, for: .normal)
+        
+        var buttonConfig = UIButton.Configuration.gray()
+        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
+        buttonConfig.titleAlignment = .center
+        buttonConfig.cornerStyle = .medium
+        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
+            var attrContainer = attrContainer
+            attrContainer.foregroundColor = UIColor.lightGray
+            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
+            return attrContainer
+        })
+        
+        button.configuration = buttonConfig
+        
+        return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
+    }
+    
+    private func showExpenseDetailButtonConfig() -> UICellAccessory.CustomViewConfiguration {
+        let button = UIButton()
+        button.setTitle("내역", for: .normal)
         button.setTitleColor(.lightGray, for: .normal)
         
         var buttonConfig = UIButton.Configuration.gray()
