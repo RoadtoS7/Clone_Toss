@@ -15,7 +15,14 @@ struct Asset: Identifiable {
     static var value: [Asset] = [
         .init(name: "토스뱅크 통장", value: 100),
         .init(name: "KB 보통예금", value: 1000),
-        .init(name: "입출금통장", value: 10000)
+        .init(name: "입출금통장", value: 10000),
+        .init(name: "입출금통장", value: 20000),
+        .init(name: "입출금통장", value: 50000),
+        .init(name: "입출금통장", value: 50000),
+        .init(name: "입출금통장", value: 50000),
+        .init(name: "입출금통장", value: 50000),
+        .init(name: "입출금통장", value: 50000)
+        
     ]
 }
 
