@@ -15,7 +15,8 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         self.navigationItem.prompt = "UITabBarController"
-        self.setViewControllers(tabViewController, animated: false)
+        self.viewControllers = tabViewController
+        
         self.tabBar.backgroundColor = .white
         self.tabBar.layer.cornerRadius = 25
         self.tabBar.layer.borderColor = UIColor.lightGray.cgColor

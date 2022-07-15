@@ -25,14 +25,18 @@ class HomeViewController: UINavigationController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
     typealias SnapShot = NSDiffableDataSourceSnapshot<Int, String>
     
-    private var collectionView: UICollectionView!
+    var collectionView: UICollectionView!
     private var dataSource: DataSource!
+    var expenseBottomView: UIView!
+    
+    var tabBar: UITabBar? { tabBarController?.tabBar }
     
     init() {
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .white
         self.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"), tag: 0)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,25 +45,41 @@ class HomeViewController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureHierachy()
+        createView()
         configureDataSource()
     }
 }
 
+// MARK: - View
 extension HomeViewController {
-    private func configureHierachy() {
+    private func createView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        
+        expenseBottomView = ExpenseBottomView()
+        expenseBottomView.translatesAutoresizingMaskIntoConstraints = false
+        expenseBottomView.backgroundColor = .white
+       
         view.addSubview(collectionView)
+        view.addSubview(expenseBottomView)
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 30),
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
+            expenseBottomView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            expenseBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            expenseBottomView.heightAnchor.constraint(equalToConstant: 30),
+            expenseBottomView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
-    
+}
+
+// MARK: - CollectionView.createLayout()
+extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
@@ -127,7 +147,6 @@ extension HomeViewController {
             
             cell.accessories = [.customView(configuration: self.sendMoneyButtonConfig(using: asset))]
         }
-        
         
         let assetHeaderRegistration = UICollectionView.SupplementaryRegistration<AssetHeader>(elementKind: AssetHeader.elementKind) { supplementaryView, elementKind, indexPath in
             supplementaryView.label.text = "자산"
