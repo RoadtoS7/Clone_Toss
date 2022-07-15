@@ -72,7 +72,7 @@ extension HomeViewController {
             
             expenseBottomView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             expenseBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            expenseBottomView.heightAnchor.constraint(equalToConstant: 30),
+            expenseBottomView.heightAnchor.constraint(equalToConstant: 50),
             expenseBottomView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }

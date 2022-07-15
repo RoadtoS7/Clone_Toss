@@ -26,14 +26,16 @@ class ExpenseBottomView: UIView {
     
     init() {
         super.init(frame: .zero)
+        self.backgroundColor = .white
+        
         self.addSubview(label)
         self.addSubview(button)
         
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: -10),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             button.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
     }
     

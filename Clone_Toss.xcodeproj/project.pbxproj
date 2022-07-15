@@ -164,8 +164,8 @@
 				2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */,
 				2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */,
 				2E6A957E2880464100B91AFD /* ExpenseHeader.swift */,
-				2E74FDF7287D925D0052C137 /* Model */,
 				2E6A95872881991800B91AFD /* ExpenseBottomView.swift */,
+				2E74FDF7287D925D0052C137 /* Model */,
 			);
 			path = Home;
 			sourceTree = "<group>";
