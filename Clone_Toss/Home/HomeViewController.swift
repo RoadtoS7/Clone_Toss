@@ -90,13 +90,11 @@ extension HomeViewController {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
             
-            // section을 기준으로 group을 지정한다.
             let groupHeight = columns == 1 ? NSCollectionLayoutDimension.fractionalWidth(0.2) : NSCollectionLayoutDimension.fractionalWidth(0.2)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionKind.columnCount)
             
             let section = NSCollectionLayoutSection(group: group)
-            
             
             if sectionKind == .asset {
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
