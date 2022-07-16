@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 enum SectionKind: Int, CaseIterable {
     case bank
@@ -29,6 +30,8 @@ class HomeViewController: UINavigationController {
     private var dataSource: DataSource!
     var expenseBottomView: UIView!
     
+    var cancellableBag = Set<AnyCancellable>()
+    
     var tabBar: UITabBar? { tabBarController?.tabBar }
     
     init() {
@@ -47,6 +50,8 @@ class HomeViewController: UINavigationController {
         super.viewDidLoad()
         createView()
         configureDataSource()
+        detectScroll()
+        
     }
 }
 
@@ -278,5 +283,60 @@ extension HomeViewController {
         button.configuration = buttonConfig
         
         return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
+    }
+}
+
+extension HomeViewController {
+    func detectScroll() {
+        let isDownScroll = collectionView.contentOffsetPublisher
+            .scan((CGFloat.zero, CGFloat.zero), { prev, contentOffset in
+                let y = contentOffset.y
+                let beforeY = prev.1
+                return (beforeY, y)
+            }).map { (beforeY, y) in
+                beforeY < y
+            }
+        
+        collectionView.contentOffsetPublisher
+            .zip(isDownScroll)
+            .sink { [weak self] contentOffset, isDownScroll in
+                guard let self = self else { return }
+                
+                let reachedExpenseHeader = self.reachedExpenseHeader(whileDownScroll: isDownScroll, using: contentOffset)
+                
+                if reachedExpenseHeader && isDownScroll && self.expenseBottomView.isHidden == false {
+                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
+                        self.expenseBottomView.alpha = 0
+                    } completion: { isDone in
+                        if isDone == false { return }
+                    }
+                }
+                
+                if reachedExpenseHeader && isDownScroll == false && self.expenseBottomView.alpha == .zero {
+                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
+                        self.expenseBottomView.alpha = 1
+                    } completion: { isDone in
+                        if isDone == false { return }
+                    }
+                }
+                
+            }.store(in: &cancellableBag)
+    }
+    
+    private func reachedExpenseHeader(whileDownScroll isDownScroll: Bool, using contentOffset: CGPoint) -> Bool {
+        let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
+        guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return false }
+        
+        let tabBarHeight = self.tabBar?.frame.height ?? .zero
+        let scrollViewHeight = self.collectionView.frame.height
+        let bottomViewHeight = self.expenseBottomView.frame.height
+        let headerPosition = header.frame.origin
+        
+        let scrollHeight = contentOffset.y + (scrollViewHeight - tabBarHeight - bottomViewHeight)
+        
+        if isDownScroll {
+            return scrollHeight >= headerPosition.y
+        }
+        return scrollHeight <= (headerPosition.y + header.frame.height)
     }
 }

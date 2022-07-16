@@ -6,7 +6,7 @@ target 'Clone_Toss' do
   use_frameworks!
 
   # Pods for Clone_Toss
-
+  
   target 'Clone_TossTests' do
     inherit! :search_paths
     # Pods for testing
