@@ -30,6 +30,27 @@ class HomeViewController: UINavigationController {
     private var dataSource: DataSource!
     var expenseBottomView: UIView!
     
+    let button: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("내역", for: .normal)
+        button.backgroundColor = .white
+        
+        var buttonConfig = UIButton.Configuration.gray()
+        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
+        buttonConfig.titleAlignment = .center
+        buttonConfig.cornerStyle = .medium
+        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
+            var attrContainer = attrContainer
+            attrContainer.foregroundColor = UIColor.lightGray
+            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
+            return attrContainer
+        })
+        
+        button.configuration = buttonConfig
+        return button
+    }()
+    
     var cancellableBag = Set<AnyCancellable>()
     
     var tabBar: UITabBar? { tabBarController?.tabBar }

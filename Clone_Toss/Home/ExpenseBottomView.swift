@@ -12,6 +12,7 @@ class ExpenseBottomView: UIView {
     let label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 18)
         label.text = "소비"
         return label
     }()
@@ -42,13 +43,13 @@ class ExpenseBottomView: UIView {
         self.backgroundColor = .white
         
         self.addSubview(label)
-        self.addSubview(button)
         
+
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20 + 17),
             label.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             button.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
     
