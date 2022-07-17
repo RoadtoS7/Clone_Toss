@@ -316,16 +316,12 @@ extension HomeViewController {
                 if reachedExpenseHeader && isDownScroll && self.expenseBottomView.isHidden == false {
                     UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
                         self.expenseBottomView.alpha = 0
-                    } completion: { isDone in
-                        if isDone == false { return }
                     }
                 }
                 
                 if reachedExpenseHeader && isDownScroll == false && self.expenseBottomView.alpha == .zero {
                     UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
                         self.expenseBottomView.alpha = 1
-                    } completion: { isDone in
-                        if isDone == false { return }
                     }
                 }
                 
