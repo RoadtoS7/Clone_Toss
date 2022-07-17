@@ -122,23 +122,26 @@ extension HomeViewController {
             
             let section = NSCollectionLayoutSection(group: group)
             
-            if sectionKind == .asset {
+            switch sectionKind {
+            case .bank:
+                section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
+                return section
+            case .asset:
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
                 let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: AssetHeader.elementKind, alignment: .topLeading)
                 section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing:20)
                 section.boundarySupplementaryItems = [sectionHeader]
                 return section
-            }
-            if sectionKind == .expense {
+            
+            case .expense:
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
                 let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: ExpenseHeader.elementKind, alignment: .topLeading)
                 section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing:20)
                 section.boundarySupplementaryItems = [sectionHeader]
                 return section
+            case .promotion:
+                return self.promotionSection()
             }
-            
-            section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
-            return section
         }
         return layout
     }
@@ -304,6 +307,19 @@ extension HomeViewController {
         button.configuration = buttonConfig
         
         return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
+    }
+    
+    private func promotionSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .fractionalWidth(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        return section
     }
 }
 
