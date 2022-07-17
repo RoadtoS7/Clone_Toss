@@ -109,36 +109,17 @@ extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
-            let columns = sectionKind.columnCount
-            
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalHeight(1.0))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
-            
-            let groupHeight = columns == 1 ? NSCollectionLayoutDimension.fractionalWidth(0.2) : NSCollectionLayoutDimension.fractionalWidth(0.2)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: groupHeight)
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionKind.columnCount)
-            
-            let section = NSCollectionLayoutSection(group: group)
             
             switch sectionKind {
             case .bank:
-                section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
-                return section
+                return self.bankSection()
+            
             case .asset:
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
-                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: AssetHeader.elementKind, alignment: .topLeading)
-                section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing:20)
-                section.boundarySupplementaryItems = [sectionHeader]
-                return section
+                return self.assetSection()
             
             case .expense:
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
-                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: ExpenseHeader.elementKind, alignment: .topLeading)
-                section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing:20)
-                section.boundarySupplementaryItems = [sectionHeader]
-                return section
+                return self.expenseSection()
+                
             case .promotion:
                 return self.promotionSection()
             }
@@ -309,18 +290,7 @@ extension HomeViewController {
         return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
     }
     
-    private func promotionSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .fractionalWidth(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 3)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
+  
 }
 
 extension HomeViewController {
