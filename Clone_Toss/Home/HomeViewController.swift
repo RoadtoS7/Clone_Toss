@@ -167,14 +167,14 @@ extension HomeViewController {
         let monthExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
                                                                                 indexPath: IndexPath,
                                                                                 itemIdentifier: String)  in
-            let asset = Asset.value[indexPath.row]
-            
+            let expense = Expense.value[indexPath.row]
             var config = cell.defaultContentConfiguration()
-            config.text = asset.name
+            config.text = expense.title
             config.textProperties.color = .black
             config.textProperties.font = .systemFont(ofSize: 13)
-            config.secondaryText = String(format: "%d원", asset.value)
+            config.secondaryText = expense.subtitle
             config.secondaryTextProperties.font = .systemFont(ofSize: 15)
+            config.image = UIImage(systemName: expense.imageName)
             
             cell.contentConfiguration = config
             cell.accessories = [.customView(configuration: self.showExpenseDetailButtonConfig())]
@@ -183,12 +183,13 @@ extension HomeViewController {
         let cardExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
                                                                                indexPath: IndexPath,
                                                                                itemIdentifier: String)  in
-            let asset = Asset.value[indexPath.row]
+            let expense = Expense.value[indexPath.row]
             
             var config = cell.defaultContentConfiguration()
-            config.text = asset.name
+            config.text = expense.title
             config.textProperties.color = .black
-            config.secondaryText = String(format: "%d원", asset.value)
+            config.secondaryText = String(format: "%d원", expense.subtitle)
+            config.image = UIImage(systemName: expense.imageName)
             
             cell.contentConfiguration = config
             cell.accessories = [.disclosureIndicator()]
@@ -203,9 +204,10 @@ extension HomeViewController {
             var config = cell.defaultContentConfiguration()
             config.text = promotion.category
             config.secondaryText = promotion.title
-            
-            guard let imageName = promotion.imageName else { return }
-            config.image = UIImage(systemName: imageName)
+            if let imageName = promotion.imageName {
+                config.image = UIImage(systemName: imageName)
+            }
+            cell.contentConfiguration = config
         }
         
         dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
