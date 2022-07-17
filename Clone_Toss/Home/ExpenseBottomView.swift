@@ -43,7 +43,7 @@ class ExpenseBottomView: UIView {
         self.backgroundColor = .white
         
         self.addSubview(label)
-        
+        self.addSubview(button)
 
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20 + 17),
