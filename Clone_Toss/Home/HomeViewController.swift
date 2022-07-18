@@ -140,89 +140,15 @@ extension HomeViewController {
     }
     
     private func configureDataSource() {
-        let bankCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                        indexPath: IndexPath,
-                                                                        itemIdentifier: String)  in
-            var config = cell.defaultContentConfiguration()
-            config.text = Bank.value.name
-            config.textProperties.color = .black
-            
-            cell.contentConfiguration = config
-            cell.backgroundColor = .clear
-            cell.accessories = [.disclosureIndicator()]
-        }
+        let bankCellRegistration = UICollectionView.CellRegistration (handler: bankCellHandler)
+        let assetCellRegistration = UICollectionView.CellRegistration(handler: assetCellHandler)
+        let assetHeaderRegistration = UICollectionView.SupplementaryRegistration<AssetHeader>(elementKind: AssetHeader.elementKind, handler: assetHeaderHandler)
         
-        let assetCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                         indexPath: IndexPath,
-                                                                         itemIdentifier: String)  in
-            let asset = Asset.value[indexPath.row]
-            
-            var config = cell.defaultContentConfiguration()
-            config.text = asset.name
-            config.textProperties.color = .black
-            config.textProperties.font = .systemFont(ofSize: 13)
-            config.secondaryText = String(format: "%d원", asset.value)
-            config.secondaryTextProperties.font = .systemFont(ofSize: 15)
-            config.image = UIImage(systemName: "dollarsign.circle")
-            cell.backgroundColor = .clear
-            cell.contentConfiguration = config
-            
-            cell.accessories = [.customView(configuration: self.sendMoneyButtonConfig(using: asset))]
-        }
+        let expenseHeaderRegistration = UICollectionView.SupplementaryRegistration<ExpenseHeader>(elementKind: ExpenseHeader.elementKind, handler: expenseHeaderHandler)
+        let monthExpenseCellRegistration = UICollectionView.CellRegistration(handler: monthCellHandler)
+        let cardExpenseCellRegistration = UICollectionView.CellRegistration (handler: cardExpenseCellHandler)
         
-        let assetHeaderRegistration = UICollectionView.SupplementaryRegistration<AssetHeader>(elementKind: AssetHeader.elementKind) { supplementaryView, elementKind, indexPath in
-            supplementaryView.label.text = "자산"
-        }
-
-        let expenseHeaderRegistration = UICollectionView.SupplementaryRegistration<ExpenseHeader>(elementKind: ExpenseHeader.elementKind) { supplementaryView, elementKind, indexPath in
-            supplementaryView.label.text = "소비"
-        }
-        
-        let monthExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                                indexPath: IndexPath,
-                                                                                itemIdentifier: String)  in
-            let expense = Expense.value[indexPath.row]
-            var config = cell.defaultContentConfiguration()
-            config.text = expense.title
-            config.textProperties.color = .black
-            config.textProperties.font = .systemFont(ofSize: 13)
-            config.secondaryText = expense.subtitle
-            config.secondaryTextProperties.font = .systemFont(ofSize: 15)
-            config.image = UIImage(systemName: expense.imageName)
-            
-            cell.contentConfiguration = config
-            cell.accessories = [.customView(configuration: self.showExpenseDetailButtonConfig())]
-        }
-        
-        let cardExpenseCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                               indexPath: IndexPath,
-                                                                               itemIdentifier: String)  in
-            let expense = Expense.value[indexPath.row]
-            
-            var config = cell.defaultContentConfiguration()
-            config.text = expense.title
-            config.textProperties.color = .black
-            config.secondaryText = String(format: "%d원", expense.subtitle)
-            config.image = UIImage(systemName: expense.imageName)
-            
-            cell.contentConfiguration = config
-            cell.accessories = [.disclosureIndicator()]
-        }
-        
-        
-        let promotionCellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell,
-                                                                             indexPath: IndexPath,
-                                                                             itemIdentifier: String)  in
-            let promotion = Promotion.value[indexPath.row]
-            
-            var config = cell.defaultContentConfiguration()
-            config.text = promotion.category
-            config.secondaryText = promotion.title
-            if let imageName = promotion.imageName {
-                config.image = UIImage(systemName: imageName)
-            }
-            cell.contentConfiguration = config
-        }
+        let promotionCellRegistration = UICollectionView.CellRegistration(handler: promotionCellHandler)
         
         dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let sectionKind = SectionKind(rawValue: indexPath.section)!
@@ -262,32 +188,6 @@ extension HomeViewController {
         snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: 3)
         
         dataSource.apply(snapShot, animatingDifferences: false)
-    }
-    
-    private func sendMoneyButtonConfig(using asset: Asset) -> UICellAccessory.CustomViewConfiguration {
-        let button = UIButton()
-        button.setTitle("송금", for: .normal)
-        button.setTitleColor(.lightGray, for: .normal)
-        
-        var buttonConfig = UIButton.Configuration.gray()
-        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
-        buttonConfig.titleAlignment = .center
-        buttonConfig.cornerStyle = .medium
-        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
-            var attrContainer = attrContainer
-            attrContainer.foregroundColor = UIColor.lightGray
-            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
-            return attrContainer
-        })
-        
-        button.configuration = buttonConfig
-        
-        return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
-    }
-    
-    private func showExpenseDetailButtonConfig() -> UICellAccessory.CustomViewConfiguration {
-        let button = ShowDetailButton()
-        return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
     }
 }
 

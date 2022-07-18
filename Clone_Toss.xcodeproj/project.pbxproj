@@ -29,6 +29,7 @@
 		2E74FDF9287D928D0052C137 /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FDF8287D928D0052C137 /* Expense.swift */; };
 		2E74FE02287DB6610052C137 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FE01287DB6610052C137 /* Bank.swift */; };
 		2E74FE04287DB8CA0052C137 /* Promotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E74FE03287DB8CA0052C137 /* Promotion.swift */; };
+		2EB1A54D28857C5C002ED7B9 /* HomeViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB1A54C28857C5C002ED7B9 /* HomeViewController+DataSource.swift */; };
 		600B1D188F984033BB233DB3 /* Pods_Clone_Toss_Clone_TossUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486581EF54F6F10F53437331 /* Pods_Clone_Toss_Clone_TossUITests.framework */; };
 		736295FF84C43AF78A515D3E /* Pods_Clone_TossTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29287834D55342D527D320A2 /* Pods_Clone_TossTests.framework */; };
 		C5120BFF145D5E067EADD515 /* Pods_Clone_Toss.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02117214D015CBE526DB4657 /* Pods_Clone_Toss.framework */; };
@@ -81,6 +82,7 @@
 		2E74FDF8287D928D0052C137 /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		2E74FE01287DB6610052C137 /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
 		2E74FE03287DB8CA0052C137 /* Promotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promotion.swift; sourceTree = "<group>"; };
+		2EB1A54C28857C5C002ED7B9 /* HomeViewController+DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HomeViewController+DataSource.swift"; sourceTree = "<group>"; };
 		486581EF54F6F10F53437331 /* Pods_Clone_Toss_Clone_TossUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clone_Toss_Clone_TossUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A62D5CAEA2004840DAE65C /* Pods-Clone_Toss-Clone_TossUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clone_Toss-Clone_TossUITests.debug.xcconfig"; path = "Target Support Files/Pods-Clone_Toss-Clone_TossUITests/Pods-Clone_Toss-Clone_TossUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8E5F2C3432897CB025192897 /* Pods-Clone_TossTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clone_TossTests.release.xcconfig"; path = "Target Support Files/Pods-Clone_TossTests/Pods-Clone_TossTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 		2E74FDFA287DA6E20052C137 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2EB1A54C28857C5C002ED7B9 /* HomeViewController+DataSource.swift */,
 				2E74FDF3287C60ED0052C137 /* HomeViewController.swift */,
 				2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */,
 				2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */,
@@ -434,6 +437,7 @@
 				2E0DF34B28844545009E78E6 /* HomeViewController+CollectionViewSection.swift in Sources */,
 				2E74FDC8287C5DEB0052C137 /* TabBarController.swift in Sources */,
 				2E6A957D287F0C3F00B91AFD /* AssetHeader.swift in Sources */,
+				2EB1A54D28857C5C002ED7B9 /* HomeViewController+DataSource.swift in Sources */,
 				2E74FDC4287C5DEB0052C137 /* AppDelegate.swift in Sources */,
 				2E6A957F2880464100B91AFD /* ExpenseHeader.swift in Sources */,
 				2E74FE02287DB6610052C137 /* Bank.swift in Sources */,
