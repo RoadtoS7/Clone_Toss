@@ -96,19 +96,15 @@ extension HomeViewController {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
             let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
-            
+
             let section: NSCollectionLayoutSection
             switch sectionKind {
             case .bank:
                 section = self.bankSection()
-                section.decorationItems = [background]
             
             case .asset:
                 section = self.assetSection()
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: AssetHeader.elementKind, alignment: .top)
                 section.decorationItems = [background]
-                section.boundarySupplementaryItems = [headerItem]
             
             case .expense:
                 section = self.expenseSection()
