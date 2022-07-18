@@ -28,19 +28,18 @@ class HomeViewController: UINavigationController {
     
     var collectionView: UICollectionView!
     private var dataSource: DataSource!
+    
     var expenseBottomView: ExpenseBottomView!
-    
-    var doingAnimation = false
-    
     let button: ShowDetailButton = {
         let button = ShowDetailButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
+    var doingAnimation = false
+    
     var cancellableBag = Set<AnyCancellable>()
     
-    var tabBar: UITabBar? { tabBarController?.tabBar }
     private let tabBarHeight: CGFloat
     
     init(tabBarHeight: CGFloat) {
@@ -96,7 +95,10 @@ extension HomeViewController {
 // MARK: - CollectionView.createLayout()
 extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
+        let layoutConfig = UICollectionViewCompositionalLayoutConfiguration()
+        layoutConfig.interSectionSpacing = 10
+    
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
             let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
 
@@ -119,7 +121,8 @@ extension HomeViewController {
             
             
             return section
-        }
+        }, configuration: layoutConfig)
+       
         layout.register(
                     SectionBackgroundView.self,
                     forDecorationViewOfKind: SectionBackgroundView.reuseIdentifier)

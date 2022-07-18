@@ -33,6 +33,7 @@ extension HomeViewController {
                 
                 if reachedExpenseHeader && isDownScroll && self.expenseBottomView.isHidden == false {
                     self.doingAnimation = true
+                    
                     let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
                     guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return  }
                     guard let expenseHeader = (header as? ExpenseHeader) else { return }
