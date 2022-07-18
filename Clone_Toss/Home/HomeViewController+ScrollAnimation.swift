@@ -80,7 +80,7 @@ extension HomeViewController {
         let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
         guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return false }
         
-        let tabBarHeight = self.tabBar?.frame.height ?? .zero
+        let tabBarHeight = self.tabBarHeight
         let scrollViewHeight = self.collectionView.frame.height
         let bottomViewHeight = self.expenseBottomView.frame.height
         let headerPosition = header.frame.origin

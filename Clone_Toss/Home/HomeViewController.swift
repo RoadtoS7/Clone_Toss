@@ -30,6 +30,10 @@ class HomeViewController: UINavigationController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
     typealias SnapShot = NSDiffableDataSourceSnapshot<Int, String>
     
+    enum Constants {
+        static let interSectionSpacing: CGFloat = 16
+    }
+    
     var collectionView: UICollectionView!
     private var dataSource: DataSource!
     
@@ -41,10 +45,8 @@ class HomeViewController: UINavigationController {
     }()
     
     var doingAnimation = false
-    
     var cancellableBag = Set<AnyCancellable>()
-    
-    private let tabBarHeight: CGFloat
+    let tabBarHeight: CGFloat
     
     init(tabBarHeight: CGFloat) {
         self.tabBarHeight = tabBarHeight
@@ -100,7 +102,7 @@ extension HomeViewController {
 extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layoutConfig = UICollectionViewCompositionalLayoutConfiguration()
-        layoutConfig.interSectionSpacing = 10
+        layoutConfig.interSectionSpacing = Constants.interSectionSpacing
     
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
