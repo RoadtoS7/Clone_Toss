@@ -20,6 +20,10 @@ enum SectionKind: Int, CaseIterable {
         case .promotion: return 1
         }
     }
+    
+    var order: Int {
+        Self.allCases.firstIndex(of: self)!
+    }
 }
 
 class HomeViewController: UINavigationController {
@@ -172,10 +176,10 @@ extension HomeViewController {
         let sectionIds = SectionKind.allCases.map { $0.rawValue }
         snapShot.appendSections(sectionIds)
         
-        snapShot.appendItems([Bank.value.id], toSection: 0)
-        snapShot.appendItems(Asset.value.map({ $0.id }), toSection: 1)
-        snapShot.appendItems(Expense.value.map({ $0.id }), toSection: 2)
-        snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: 3)
+        snapShot.appendItems([Bank.value.id], toSection: SectionKind.bank.order)
+        snapShot.appendItems(Asset.value.map({ $0.id }), toSection: SectionKind.asset.order)
+        snapShot.appendItems(Expense.value.map({ $0.id }), toSection: SectionKind.expense.order)
+        snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: SectionKind.promotion.order)
         
         dataSource.apply(snapShot, animatingDifferences: false)
     }
