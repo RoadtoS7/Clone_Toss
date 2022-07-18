@@ -41,12 +41,13 @@ class HomeViewController: UINavigationController {
     var cancellableBag = Set<AnyCancellable>()
     
     var tabBar: UITabBar? { tabBarController?.tabBar }
+    private let tabBarHeight: CGFloat
     
-    init() {
+    init(tabBarHeight: CGFloat) {
+        self.tabBarHeight = tabBarHeight
         super.init(nibName: nil, bundle: nil)
         self.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"), tag: 0)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,15 +77,17 @@ extension HomeViewController {
         view.addSubview(collectionView)
         view.addSubview(expenseBottomView)
         
+        print("bottomViewHeight: \( self.tabBarHeight + expenseBottomView.label.frame.height)")
+        
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 30),
             collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            expenseBottomView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            expenseBottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             expenseBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            expenseBottomView.heightAnchor.constraint(equalToConstant: 50),
+            expenseBottomView.heightAnchor.constraint(equalToConstant: self.tabBarHeight + 100),
             expenseBottomView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }

@@ -8,14 +8,13 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    let tabViewController = [HomeViewController(),
-                             ViewController()]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.navigationItem.prompt = "UITabBarController"
-        self.viewControllers = tabViewController
+        self.viewControllers = [HomeViewController(tabBarHeight: self.tabBar.frame.height),
+                                ViewController()]
         
         self.tabBar.backgroundColor = .white
         self.tabBar.layer.cornerRadius = 25
