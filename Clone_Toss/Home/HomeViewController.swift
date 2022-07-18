@@ -28,7 +28,9 @@ class HomeViewController: UINavigationController {
     
     var collectionView: UICollectionView!
     private var dataSource: DataSource!
-    var expenseBottomView: UIView!
+    var expenseBottomView: ExpenseBottomView!
+    
+    var doingAnimation = false
     
     let button: UIButton = {
         let button = UIButton()
@@ -81,7 +83,6 @@ extension HomeViewController {
     private func createView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.delegate = self
         
         expenseBottomView = ExpenseBottomView()
         expenseBottomView.translatesAutoresizingMaskIntoConstraints = false
@@ -272,76 +273,8 @@ extension HomeViewController {
     }
     
     private func showExpenseDetailButtonConfig() -> UICellAccessory.CustomViewConfiguration {
-        let button = UIButton()
-        button.setTitle("내역", for: .normal)
-        button.setTitleColor(.lightGray, for: .normal)
-        
-        var buttonConfig = UIButton.Configuration.gray()
-        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
-        buttonConfig.titleAlignment = .center
-        buttonConfig.cornerStyle = .medium
-        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
-            var attrContainer = attrContainer
-            attrContainer.foregroundColor = UIColor.lightGray
-            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
-            return attrContainer
-        })
-        
-        button.configuration = buttonConfig
-        
+        let button = ShowDetailButton()
         return UICellAccessory.CustomViewConfiguration(customView: button, placement: .trailing(displayed: .always))
     }
-    
-  
 }
 
-extension HomeViewController {
-    func detectScroll() {
-        let isDownScroll = collectionView.contentOffsetPublisher
-            .scan((CGFloat.zero, CGFloat.zero), { prev, contentOffset in
-                let y = contentOffset.y
-                let beforeY = prev.1
-                return (beforeY, y)
-            }).map { (beforeY, y) in
-                beforeY < y
-            }
-        
-        collectionView.contentOffsetPublisher
-            .zip(isDownScroll)
-            .sink { [weak self] contentOffset, isDownScroll in
-                guard let self = self else { return }
-                
-                let reachedExpenseHeader = self.reachedExpenseHeader(whileDownScroll: isDownScroll, using: contentOffset)
-                
-                if reachedExpenseHeader && isDownScroll && self.expenseBottomView.isHidden == false {
-                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
-                        self.expenseBottomView.alpha = 0
-                    }
-                }
-                
-                if reachedExpenseHeader && isDownScroll == false && self.expenseBottomView.alpha == .zero {
-                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
-                        self.expenseBottomView.alpha = 1
-                    }
-                }
-                
-            }.store(in: &cancellableBag)
-    }
-    
-    private func reachedExpenseHeader(whileDownScroll isDownScroll: Bool, using contentOffset: CGPoint) -> Bool {
-        let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-        guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return false }
-        
-        let tabBarHeight = self.tabBar?.frame.height ?? .zero
-        let scrollViewHeight = self.collectionView.frame.height
-        let bottomViewHeight = self.expenseBottomView.frame.height
-        let headerPosition = header.frame.origin
-        
-        let scrollHeight = contentOffset.y + (scrollViewHeight - tabBarHeight - bottomViewHeight)
-        
-        if isDownScroll {
-            return scrollHeight >= headerPosition.y
-        }
-        return scrollHeight <= (headerPosition.y + header.frame.height)
-    }
-}

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E0DF349288401B4009E78E6 /* SectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */; };
+		2E0DF34B28844545009E78E6 /* HomeViewController+CollectionViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */; };
+		2E0DF34D28845015009E78E6 /* ShowDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */; };
 		2E6A957D287F0C3F00B91AFD /* AssetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */; };
 		2E6A957F2880464100B91AFD /* ExpenseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A957E2880464100B91AFD /* ExpenseHeader.swift */; };
 		2E6A95862881980800B91AFD /* HomeViewController+ScrollAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */; };
@@ -52,6 +55,9 @@
 		02117214D015CBE526DB4657 /* Pods_Clone_Toss.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clone_Toss.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26734D55E0A67782598D1EDD /* Pods-Clone_Toss-Clone_TossUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clone_Toss-Clone_TossUITests.release.xcconfig"; path = "Target Support Files/Pods-Clone_Toss-Clone_TossUITests/Pods-Clone_Toss-Clone_TossUITests.release.xcconfig"; sourceTree = "<group>"; };
 		29287834D55342D527D320A2 /* Pods_Clone_TossTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clone_TossTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionBackgroundView.swift; sourceTree = "<group>"; };
+		2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+CollectionViewSection.swift"; sourceTree = "<group>"; };
+		2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailButton.swift; sourceTree = "<group>"; };
 		2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetHeader.swift; sourceTree = "<group>"; };
 		2E6A957E2880464100B91AFD /* ExpenseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseHeader.swift; sourceTree = "<group>"; };
 		2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+ScrollAnimation.swift"; sourceTree = "<group>"; };
@@ -181,11 +187,14 @@
 			children = (
 				2E74FDF3287C60ED0052C137 /* HomeViewController.swift */,
 				2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */,
+				2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */,
 				2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */,
 				2E6A957E2880464100B91AFD /* ExpenseHeader.swift */,
 				2E6A95872881991800B91AFD /* ExpenseBottomView.swift */,
 				2E74FDF7287D925D0052C137 /* Model */,
 				2E6A958B2881B65900B91AFD /* CollectionView+Combine.swift */,
+				2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */,
+				2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -417,15 +426,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E74FDF9287D928D0052C137 /* Expense.swift in Sources */,
+				2E0DF34D28845015009E78E6 /* ShowDetailButton.swift in Sources */,
 				2E74FDF6287C670C0052C137 /* ViewController.swift in Sources */,
 				2E6A95882881991800B91AFD /* ExpenseBottomView.swift in Sources */,
 				2E6A95862881980800B91AFD /* HomeViewController+ScrollAnimation.swift in Sources */,
 				2E6A958C2881B65900B91AFD /* CollectionView+Combine.swift in Sources */,
+				2E0DF34B28844545009E78E6 /* HomeViewController+CollectionViewSection.swift in Sources */,
 				2E74FDC8287C5DEB0052C137 /* TabBarController.swift in Sources */,
 				2E6A957D287F0C3F00B91AFD /* AssetHeader.swift in Sources */,
 				2E74FDC4287C5DEB0052C137 /* AppDelegate.swift in Sources */,
 				2E6A957F2880464100B91AFD /* ExpenseHeader.swift in Sources */,
 				2E74FE02287DB6610052C137 /* Bank.swift in Sources */,
+				2E0DF349288401B4009E78E6 /* SectionBackgroundView.swift in Sources */,
 				2E74FE04287DB8CA0052C137 /* Promotion.swift in Sources */,
 				2E74FDC6287C5DEB0052C137 /* SceneDelegate.swift in Sources */,
 				2E74FDF4287C60ED0052C137 /* HomeViewController.swift in Sources */,
