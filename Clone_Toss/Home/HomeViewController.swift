@@ -59,7 +59,6 @@ class HomeViewController: UINavigationController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        view.backgroundColor = .white
         self.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"), tag: 0)
         
@@ -82,6 +81,7 @@ class HomeViewController: UINavigationController {
 extension HomeViewController {
     private func createView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        collectionView.backgroundView?.backgroundColor = .gray
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         expenseBottomView = ExpenseBottomView()
@@ -111,20 +111,31 @@ extension HomeViewController {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
             
+            let section: NSCollectionLayoutSection
             switch sectionKind {
             case .bank:
-                return self.bankSection()
+                section = self.bankSection()
             
             case .asset:
-                return self.assetSection()
+                section = self.assetSection()
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
+                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: AssetHeader.elementKind, alignment: .top)
+                section.boundarySupplementaryItems = [headerItem]
             
             case .expense:
-                return self.expenseSection()
+                section = self.expenseSection()
                 
             case .promotion:
-                return self.promotionSection()
+                section = self.promotionSection()
             }
+            
+            let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
+            section.decorationItems = [background]
+            return section
         }
+        layout.register(
+                    SectionBackgroundView.self,
+                    forDecorationViewOfKind: SectionBackgroundView.reuseIdentifier)
         return layout
     }
     
@@ -137,6 +148,7 @@ extension HomeViewController {
             config.textProperties.color = .black
             
             cell.contentConfiguration = config
+            cell.backgroundColor = .clear
             cell.accessories = [.disclosureIndicator()]
         }
         
@@ -151,7 +163,8 @@ extension HomeViewController {
             config.textProperties.font = .systemFont(ofSize: 13)
             config.secondaryText = String(format: "%d원", asset.value)
             config.secondaryTextProperties.font = .systemFont(ofSize: 15)
-            
+            config.image = UIImage(systemName: "dollarsign.circle")
+            cell.backgroundColor = .clear
             cell.contentConfiguration = config
             
             cell.accessories = [.customView(configuration: self.sendMoneyButtonConfig(using: asset))]
@@ -160,7 +173,7 @@ extension HomeViewController {
         let assetHeaderRegistration = UICollectionView.SupplementaryRegistration<AssetHeader>(elementKind: AssetHeader.elementKind) { supplementaryView, elementKind, indexPath in
             supplementaryView.label.text = "자산"
         }
-        
+
         let expenseHeaderRegistration = UICollectionView.SupplementaryRegistration<ExpenseHeader>(elementKind: ExpenseHeader.elementKind) { supplementaryView, elementKind, indexPath in
             supplementaryView.label.text = "소비"
         }

@@ -28,7 +28,6 @@ extension ExpenseHeader {
         label.font = .systemFont(ofSize: 18)
         label.setContentHuggingPriority(.init(100), for: .horizontal)
         
-        
         self.addSubview(label)
 
         let inset: CGFloat = 16

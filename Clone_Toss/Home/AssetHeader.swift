@@ -25,6 +25,7 @@ class AssetHeader: UICollectionReusableView {
 
 extension AssetHeader {
     private func configure() {
+        self.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 18)
         label.setContentHuggingPriority(.init(100), for: .horizontal)
