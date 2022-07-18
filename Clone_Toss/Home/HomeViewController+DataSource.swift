@@ -106,6 +106,8 @@ extension HomeViewController {
     func promotionCellHandler(cell: UICollectionViewListCell,
                                 indexPath: IndexPath,
                                 itemIdentifier: String) {
+        cell.layer.cornerRadius = 15
+        cell.clipsToBounds = true
         let promotion = Promotion.value[indexPath.row]
         
         var config = cell.defaultContentConfiguration()

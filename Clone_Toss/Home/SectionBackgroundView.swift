@@ -27,14 +27,14 @@ class SectionBackgroundView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .lightGray
+        backgroundColor = .toss
         addSubview(insetView)
 
         NSLayoutConstraint.activate([
             insetView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             trailingAnchor.constraint(equalTo: insetView.trailingAnchor, constant: 15),
-            insetView.topAnchor.constraint(equalTo: topAnchor),
-            insetView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            insetView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            insetView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 10)
         ])
     }
 

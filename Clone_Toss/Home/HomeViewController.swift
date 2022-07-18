@@ -32,24 +32,9 @@ class HomeViewController: UINavigationController {
     
     var doingAnimation = false
     
-    let button: UIButton = {
-        let button = UIButton()
+    let button: ShowDetailButton = {
+        let button = ShowDetailButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("내역", for: .normal)
-        button.backgroundColor = .white
-        
-        var buttonConfig = UIButton.Configuration.gray()
-        buttonConfig.contentInsets = .init(top: 7, leading: 15, bottom: 9, trailing: 15)
-        buttonConfig.titleAlignment = .center
-        buttonConfig.cornerStyle = .medium
-        buttonConfig.titleTextAttributesTransformer = .init({ attrContainer in
-            var attrContainer = attrContainer
-            attrContainer.foregroundColor = UIColor.lightGray
-            attrContainer.font = UIFont.boldSystemFont(ofSize: 12)
-            return attrContainer
-        })
-        
-        button.configuration = buttonConfig
         return button
     }()
     
@@ -81,7 +66,7 @@ class HomeViewController: UINavigationController {
 extension HomeViewController {
     private func createView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundView?.backgroundColor = .gray
+        collectionView.backgroundColor = UIColor.toss
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         expenseBottomView = ExpenseBottomView()
@@ -110,27 +95,30 @@ extension HomeViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment in
             guard let sectionKind = SectionKind(rawValue: sectionIndex) else { return nil }
+            let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
             
             let section: NSCollectionLayoutSection
             switch sectionKind {
             case .bank:
                 section = self.bankSection()
+                section.decorationItems = [background]
             
             case .asset:
                 section = self.assetSection()
                 let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: AssetHeader.elementKind, alignment: .top)
+                section.decorationItems = [background]
                 section.boundarySupplementaryItems = [headerItem]
             
             case .expense:
                 section = self.expenseSection()
+                section.decorationItems = [background]
                 
             case .promotion:
                 section = self.promotionSection()
             }
             
-            let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
-            section.decorationItems = [background]
+            
             return section
         }
         layout.register(
