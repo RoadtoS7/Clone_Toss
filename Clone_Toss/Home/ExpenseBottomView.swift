@@ -22,9 +22,24 @@ class ExpenseBottomView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createView()
+    }
 
     init() {
         super.init(frame: .zero)
+        createView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ExpenseBottomView {
+    func createView() {
         self.backgroundColor = .white
         
         self.addSubview(label)
@@ -36,9 +51,5 @@ class ExpenseBottomView: UIView {
             button.centerYAnchor.constraint(equalTo: label.centerYAnchor),
             button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
