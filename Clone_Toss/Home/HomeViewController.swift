@@ -32,24 +32,30 @@ class HomeViewController: UINavigationController {
     
     enum Constants {
         static let interSectionSpacing: CGFloat = 16
+        static let margin: CGFloat = 15
     }
     
     var collectionView: UICollectionView!
     private var dataSource: DataSource!
     
-    var expenseBottomView: ExpenseBottomView!
     let button: ShowDetailButton = {
         let button = ShowDetailButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
+    var bottomExpenseViewHeight: CGFloat {
+        guard let tabBarController = parent as? TabBarController else {
+            return .zero
+        }
+        return tabBarController.expenseView.frame.height
+    }
+    
     var doingAnimation = false
     var cancellableBag = Set<AnyCancellable>()
-    let tabBarHeight: CGFloat
+   
     
-    init(tabBarHeight: CGFloat) {
-        self.tabBarHeight = tabBarHeight
+    init() {
         super.init(nibName: nil, bundle: nil)
         self.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"), tag: 0)
@@ -64,7 +70,6 @@ class HomeViewController: UINavigationController {
         createView()
         configureDataSource()
         detectScroll()
-        
     }
 }
 
@@ -74,26 +79,15 @@ extension HomeViewController {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         collectionView.backgroundColor = UIColor.toss
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.bounces = false
         
-        expenseBottomView = ExpenseBottomView()
-        expenseBottomView.translatesAutoresizingMaskIntoConstraints = false
-        expenseBottomView.backgroundColor = .white
-       
         view.addSubview(collectionView)
-        view.addSubview(expenseBottomView)
-        
-        print("bottomViewHeight: \( self.tabBarHeight + expenseBottomView.label.frame.height)")
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: view.bounds.height - 30),
-            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            
-            expenseBottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            expenseBottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            expenseBottomView.heightAnchor.constraint(equalToConstant: self.tabBarHeight + 100),
-            expenseBottomView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
 }
@@ -184,6 +178,19 @@ extension HomeViewController {
         snapShot.appendItems(Promotion.value.map({ $0.id }), toSection: SectionKind.promotion.order)
         
         dataSource.apply(snapShot, animatingDifferences: false)
+    }
+}
+
+// MARK: TabBarController의 하단 view appear/disapper 처리 메서드
+extension HomeViewController {
+    func showExpenseBottomView() {
+        guard let tabBarController = parent as? TabBarController else { return }
+        tabBarController.showExpenseView()
+    }
+    
+    func closeExpenseBottomView() {
+        guard let tabBarController = parent as? TabBarController else { return }
+        tabBarController.closeExpenseView()
     }
 }
 

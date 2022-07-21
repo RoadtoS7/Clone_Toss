@@ -42,6 +42,11 @@ extension ExpenseBottomView {
     func createView() {
         self.backgroundColor = .white
         
+        self.layer.cornerRadius = 25
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.layer.borderWidth = 1
+        self.clipsToBounds = true
+        
         self.addSubview(label)
         self.addSubview(button)
 

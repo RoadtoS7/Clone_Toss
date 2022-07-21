@@ -8,88 +8,102 @@
 import UIKit
 import Combine
 
+class ScaleCalculator {
+    static func xScaleFactor(initialFrame: CGRect, finalFrame: CGRect, presenting: Bool) -> CGFloat {
+        presenting ?
+        initialFrame.width / finalFrame.width :
+        finalFrame.width / initialFrame.width
+    }
+
+    static func yScaleFactor(initialFrame: CGRect, finalFrame: CGRect, presenting: Bool) -> CGFloat {
+        presenting ?
+          initialFrame.height / finalFrame.height :
+          finalFrame.height / initialFrame.height
+    }
+}
+
 extension HomeViewController {
     func detectScroll() {
         let isDownScroll = collectionView.contentOffsetPublisher
+        // (beforebefore, before)
             .scan((CGFloat.zero, CGFloat.zero), { prev, contentOffset in
                 let y = contentOffset.y
                 let beforeY = prev.1
                 return (beforeY, y)
-            }).map { (beforeY, y) in
-                beforeY < y
-            }
-        
-        
+            }).flatMap({ beforeY, y in
+                Just(beforeY < y)
+            })
         
         collectionView.contentOffsetPublisher
             .zip(isDownScroll)
-            .drop(while: { (_, _) in
-                self.doingAnimation
-            })
-            .sink { [weak self] contentOffset, isDownScroll in
+            .filter({ (_, isDownScroll) in isDownScroll })
+            .filter { [weak self] offset, isDownScroll in
+                // MARK: expense background에 닿았는지 체크한다.
+                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
+                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
+                let headerOrigin = header?.frame.origin ?? .zero
                 
-                guard let self = self else { return }
-                let reachedExpenseHeader = self.reachedExpenseHeader(whileDownScroll: isDownScroll, using: contentOffset)
+                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
                 
-                if reachedExpenseHeader && isDownScroll && self.expenseBottomView.isHidden == false {
-                    self.doingAnimation = true
-                    
-                    let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-                    guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return  }
-                    guard let expenseHeader = (header as? ExpenseHeader) else { return }
-                        
-                    let originButton = self.expenseBottomView.button
-                    let buttonFrame = self.expenseBottomView.convert(originButton.frame, to: self.collectionView)
-                    let button = ShowDetailButton(frame: buttonFrame)
-                    let fromLocation = self.expenseBottomView.convert(originButton.frame.origin, to: self.collectionView)
-                    button.backgroundColor = .red
-                    button.layer.zPosition = 20
-                    self.collectionView.addSubview(button)
-                    
-                    guard let cell = self.collectionView.cellForItem(at: indexPath) else { return }
-                    guard let toButton = cell.subviews.filter { $0 is ShowDetailButton }.first else { return }
-                    let toLocation = cell.convert(toButton.frame.origin, to: self.collectionView)
-                    let yGap = toLocation.y - fromLocation.y
-                    
-                    self.expenseBottomView.button.isHidden = true
-                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
-                        self.expenseBottomView.alpha = 0
-                        let move = CGAffineTransform(translationX: 0, y: yGap)
-                        button.frame.origin = toLocation
-                    } completion: { isDone in
-                        if isDone == false { return }
-                        button.isHidden = true
-                        self.expenseBottomView.isHidden = true
-                        self.doingAnimation = false
-                    }
-                }
-                
-                if reachedExpenseHeader && isDownScroll == false && self.expenseBottomView.alpha == .zero {
-                    UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut) {
-                        self.expenseBottomView.alpha = 1
-                    } completion: { isDone in
-                        if isDone == false { return }
-                        self.expenseBottomView.isHidden = false
-                        self.doingAnimation = false
-                    }
-                }
+                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
+                return scrolledLength >= headerOrigin.y
+            }.sink { _ in
+                self.closeExpenseBottomView()
             }.store(in: &cancellableBag)
-    }
-    
-    private func reachedExpenseHeader(whileDownScroll isDownScroll: Bool, using contentOffset: CGPoint) -> Bool {
-        let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-        guard let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath) else { return false }
         
-        let tabBarHeight = self.tabBarHeight
-        let scrollViewHeight = self.collectionView.frame.height
-        let bottomViewHeight = self.expenseBottomView.frame.height
-        let headerPosition = header.frame.origin
-        
-        let scrollHeight = contentOffset.y + (scrollViewHeight - tabBarHeight - bottomViewHeight)
-        
-        if isDownScroll {
-            return scrollHeight >= headerPosition.y
-        }
-        return scrollHeight <= (headerPosition.y + header.frame.height)
+        collectionView.contentOffsetPublisher
+            .zip(isDownScroll)
+            .filter({ (_, isDownScroll) in isDownScroll == false })
+            .filter { [weak self] offset, isDownScroll in
+                // MARK: expense background에 닿았는지 체크한다.
+                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
+                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
+                let headerOrigin = header?.frame.origin ?? .zero
+                
+                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
+                
+                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
+                return scrolledLength <= headerOrigin.y
+            }.sink { _ in
+                self.showExpenseBottomView()
+            }.store(in: &cancellableBag)
+            
+//        collectionView.contentOffsetPublisher
+//            .zip(isDownScroll)
+//            .flatMap({  [weak self] (offset, isDownScroll) -> AnyPublisher<Bool, Never> in
+//                // MARK: expense background에 닿았는지 체크한다.
+//                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
+//                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
+//                let headerOrigin = header?.frame.origin ?? .zero
+//
+//                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
+//
+//                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
+//
+//
+//                // MARK: Scroll Down
+//                if isDownScroll {
+//                    if scrolledLength >= headerOrigin.y {
+//                        return Just(isDownScroll).eraseToAnyPublisher()
+//                    }
+//                }
+//
+//
+//                // MARK: Scroll Up
+//                if isDownScroll == false {
+//                    if scrolledLength <= headerOrigin.y {
+//                        return Just(isDownScroll).eraseToAnyPublisher()
+//                    }
+//                }
+//                return Empty().eraseToAnyPublisher()
+//            })
+//            .sink { isDownScroll in
+//                print("isDownScroll: \(isDownScroll)")
+//                if isDownScroll {
+//                    self.closeExpenseBottomView()
+//                    return
+//                }
+//                self.showExpenseBottomView()
+//            }.store(in: &cancellableBag)
     }
 }
