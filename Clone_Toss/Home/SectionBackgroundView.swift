@@ -37,7 +37,7 @@ class SectionBackgroundView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             insetView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             trailingAnchor.constraint(equalTo: insetView.trailingAnchor, constant: 15),
-            insetView.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            insetView.topAnchor.constraint(equalTo: topAnchor),
             bottomConstraint
         ])
     }

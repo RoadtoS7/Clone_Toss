@@ -42,8 +42,7 @@ extension AssetHeader {
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
             label.trailingAnchor.constraint(equalTo: arrowImageView.leadingAnchor),
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             arrowImageView.leadingAnchor.constraint(equalTo: label.trailingAnchor),
             arrowImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),

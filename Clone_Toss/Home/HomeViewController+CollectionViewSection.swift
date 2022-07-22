@@ -35,9 +35,9 @@ extension HomeViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 0, leading: 20, bottom: 20, trailing:20)
         
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.3))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(Constants.headerHeight))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: AssetHeader.elementKind, alignment: .topLeading)
-        sectionHeader.contentInsets = .init(top: 20, leading: 0, bottom: 0, trailing: 0)
+        sectionHeader.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         section.boundarySupplementaryItems = [sectionHeader]
         return section
@@ -48,7 +48,7 @@ extension HomeViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing:20)
         
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.3))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(Constants.headerHeight))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: ExpenseHeader.elementKind, alignment: .topLeading)
         
         section.boundarySupplementaryItems = [sectionHeader]
