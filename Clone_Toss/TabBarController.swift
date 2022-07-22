@@ -48,7 +48,7 @@ class TabBarController: UITabBarController {
         NSLayoutConstraint.activate([
             expenseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             expenseView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: 100),
+            expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: 50),
             expenseView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             splitLine.centerXAnchor.constraint(equalTo: expenseView.centerXAnchor),
@@ -78,7 +78,7 @@ class TabBarController: UITabBarController {
         NSLayoutConstraint.activate([
             transitioningView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             widthConstraint,
-            transitioningView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: 100),
+            transitioningView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: 50),
             transitioningView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         

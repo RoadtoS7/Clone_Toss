@@ -64,7 +64,7 @@ extension HomeViewController {
     }
     
     func expenseHeaderHandler(expenseHeader: ExpenseHeader, elementKind: String, indexPath: IndexPath) {
-        expenseHeader.label.text = "자산"
+        expenseHeader.label.text = "소비"
     }
     
     func monthCellHandler(cell: UICollectionViewListCell,
