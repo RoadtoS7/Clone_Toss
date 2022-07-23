@@ -15,7 +15,6 @@ class TabBarController: UITabBarController {
         return view
     }()
     var expenseViewMinWidth: CGFloat { expenseView.frame.width - 15 * 2 }
-    var expenseViewHeight: CGFloat { view.bounds.width * 0.3 }
     
     let splitLine: UIView = {
         let view = UIView()
@@ -50,7 +49,7 @@ class TabBarController: UITabBarController {
         NSLayoutConstraint.activate([
             expenseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             expenseView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: expenseViewHeight),
+            expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: HomeViewController.Constants.headerHeight),
             expenseView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             splitLine.centerXAnchor.constraint(equalTo: expenseView.centerXAnchor),
@@ -60,11 +59,8 @@ class TabBarController: UITabBarController {
         ])
         
         
-        
         /// show
         tabBar.layer.borderColor = UIColor.white.cgColor
-        
-   
     }
 
     func showExpenseView() {
@@ -80,7 +76,7 @@ class TabBarController: UITabBarController {
         NSLayoutConstraint.activate([
             transitioningView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             widthConstraint,
-            transitioningView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: expenseViewHeight),
+            transitioningView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: HomeViewController.Constants.headerHeight),
             transitioningView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         
