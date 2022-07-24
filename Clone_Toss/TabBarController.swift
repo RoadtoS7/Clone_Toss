@@ -145,7 +145,7 @@ class TabBarController: UITabBarController {
         let dismissingView = dismissingView()
         view.addSubview(dismissingView)
         
-        let widthConstraint = dismissingView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0)
+        let widthConstraint = dismissingView.widthAnchor.constraint(equalToConstant: view.bounds.width)
         
         NSLayoutConstraint.activate([
             dismissingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
