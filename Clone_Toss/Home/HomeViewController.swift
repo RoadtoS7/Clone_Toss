@@ -51,7 +51,7 @@ class HomeViewController: UINavigationController {
     }()
     
     
-    var bottomExpenseView: UIView? {
+    var bottomExpenseView: ExpenseBottomView? {
         let tabBarController = parent as? TabBarController
         return tabBarController?.expenseView
     }

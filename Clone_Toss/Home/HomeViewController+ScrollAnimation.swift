@@ -32,7 +32,20 @@ extension HomeViewController {
     func animateExpenseBottomView(toHidden: Bool) {
         self.isExpenseViewHidden = toHidden
         
+        let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
+        guard let cell = collectionView.cellForItem(at: indexPath),
+              let button: UIButton =  cell.subviews.filter({ $0 is UIButton }).first as? UIButton
+        else { return }
+        
+        let buttonOrigin = cell.convert(button.frame.origin, to: collectionView)
+        let bottomViewButton = bottomExpenseView!.button
+        let bototmViewButtonOrigin = bottomExpenseView!.convert(bottomViewButton.frame.origin, to: collectionView)
+        
         if toHidden {
+            let mockButton = ShowDetailButton(frame: .init(origin: bototmViewButtonOrigin, size: bottomViewButton.frame.size))
+            self.collectionView.addSubview(mockButton)
+            self.collectionView.layoutIfNeeded()
+            
             self.bottomExpenseView?.isHidden = true
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
                 self.tabBarController?.tabBar.layer.cornerRadius = 20
@@ -45,18 +58,30 @@ extension HomeViewController {
                 self.bottomExpenseView?.layer.cornerRadius = Constants.cornerRaidus
                 self.bottomExpenseView?.layer.borderColor = UIColor.lightGray.cgColor
                 
+                mockButton.frame.origin = buttonOrigin
+                
                 self.view.layoutIfNeeded()
+            } completion: { _ in
+                mockButton.removeFromSuperview()
             }
         }
         else {
+            let mockButton = ShowDetailButton(frame: .init(origin: buttonOrigin, size: button.frame.size))
+            self.collectionView.addSubview(mockButton)
+            self.collectionView.layoutIfNeeded()
+            
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
                 self.tabBarController?.tabBar.layer.cornerRadius = 0
                 self.tabBarController?.tabBar.layer.borderWidth = 0
 
                 self.expenseBackgroundWidthConstraint?.constant = self.view.bounds.width
+                
+                mockButton.frame.origin = bototmViewButtonOrigin
+                
                 self.view.layoutIfNeeded()
             } completion: { _ in
                 self.bottomExpenseView?.isHidden = false
+                mockButton.removeFromSuperview()
             }
         }
         
