@@ -84,7 +84,5 @@ extension HomeViewController {
                 mockButton.removeFromSuperview()
             }
         }
-        
     }
 }
-

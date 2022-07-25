@@ -64,19 +64,5 @@ class TabBarController: UITabBarController {
             splitLine.heightAnchor.constraint(equalToConstant: 1),
         ])
     }
-
-    func closeExpenseView() {
-        if expenseView.isHidden { return }
-
-        // tabbar 조정
-        self.tabBar.backgroundColor = .white
-        self.tabBar.layer.cornerRadius = 25
-        self.tabBar.layer.borderColor = UIColor.lightGray.cgColor
-        self.tabBar.clipsToBounds = true
-        
-        // 기존 뷰 사라짐
-        expenseView.isHidden = true
-        splitLine.isHidden = true
-    }
 }
 
