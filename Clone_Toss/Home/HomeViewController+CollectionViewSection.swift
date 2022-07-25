@@ -25,7 +25,7 @@ extension HomeViewController {
         let group = group(in: .bank)
         let section = NSCollectionLayoutSection(group: group)
         let background = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.reuseIdentifier)
-        section.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing:20)
+        section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing:20)
         return section
     }
     
