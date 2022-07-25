@@ -27,17 +27,8 @@ class TabBarController: UITabBarController {
         return view
     }()
     
-    let splitLine: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black
-        view.isHidden = true
-        return view
-    }()
-    
-    let homeViewController = HomeViewController()
     var embededViewControlleres: [UIViewController] {
-        [homeViewController, ViewController()]
+        [HomeViewController(), ViewController()]
     }
 
     override func viewDidLoad() {
@@ -46,7 +37,6 @@ class TabBarController: UITabBarController {
         self.tabBar.layer.zPosition = 999
         
         view.addSubview(expenseView)
-        expenseView.addSubview(splitLine)
 
         self.navigationItem.prompt = "UITabBarController"
         self.viewControllers = embededViewControlleres
@@ -57,11 +47,6 @@ class TabBarController: UITabBarController {
             expenseView.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor),
             expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: HomeViewController.Constants.headerHeight),
             expenseView.widthAnchor.constraint(equalTo: tabBar.widthAnchor),
-            
-            splitLine.centerXAnchor.constraint(equalTo: expenseView.centerXAnchor),
-            splitLine.bottomAnchor.constraint(equalTo: expenseView.topAnchor, constant: -5),
-            splitLine.widthAnchor.constraint(equalTo: expenseView.widthAnchor, constant: -30),
-            splitLine.heightAnchor.constraint(equalToConstant: 1),
         ])
     }
 }

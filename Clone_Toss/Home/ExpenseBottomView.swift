@@ -23,6 +23,13 @@ class ExpenseBottomView: UIView {
         return button
     }()
     
+    let splitLine: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.lightGray
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         createView()
@@ -44,12 +51,22 @@ extension ExpenseBottomView {
         
         self.addSubview(label)
         self.addSubview(button)
+        self.addSubview(splitLine)
 
         NSLayoutConstraint.activate([
+            // Label
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20 + 17),
             label.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            
+            // button
             button.centerYAnchor.constraint(equalTo: label.centerYAnchor),
-            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+            button.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            
+            // splitLine
+            splitLine.centerXAnchor.constraint(equalTo: centerXAnchor),
+            splitLine.widthAnchor.constraint(equalTo: widthAnchor, constant: -30),
+            splitLine.heightAnchor.constraint(equalToConstant: 0.5),
+            splitLine.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }
