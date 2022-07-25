@@ -13,16 +13,17 @@ extension HomeViewController {
     func detectScroll() {
         collectionView.contentOffsetPublisher
             .sink { [weak self] contentOffset in
-                guard let self = self else { return }
-                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-                let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
-                
-                guard let headerBottomY = header?.frame.maxY,
-                      self.bottomExpenseViewHeight != .zero
+                guard let self = self,
+                      let expenseBackground = self.expenseBackground
                 else { return }
+                let expenseBackgroundOriginY = expenseBackground.frame.origin.y + Constants.margin
                 
-                let scrolledPosition = contentOffset.y + self.collectionViewHeight - self.bottomExpenseViewHeight - Constants.interSectionSpacing
-                let isHidden =  scrolledPosition >= headerBottomY
+                guard self.bottomExpenseViewHeight != .zero else { return }
+                
+                let collectionViewHeight = self.collectionView.frame.height
+                let scrolledPosition = contentOffset.y + collectionViewHeight - self.bottomExpenseViewHeight
+                let isHidden =  scrolledPosition >= expenseBackgroundOriginY
+
                 guard isHidden != self.isExpenseViewHidden else { return }
                 self.animateExpenseBottomView(toHidden: isHidden)
             }.store(in: &cancellableBag)

@@ -33,7 +33,7 @@ class HomeViewController: UINavigationController {
     enum Constants {
         static let interSectionSpacing: CGFloat = 16
         static let margin: CGFloat = 15
-        static let headerHeight: CGFloat = 40
+        static let headerHeight: CGFloat = 60
         static let cornerRaidus: CGFloat = 15
     }
     

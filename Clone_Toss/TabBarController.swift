@@ -43,7 +43,7 @@ class TabBarController: UITabBarController {
         embededViewControlleres.forEach { self.addChild($0) }
         
         NSLayoutConstraint.activate([
-            expenseView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            expenseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             expenseView.leadingAnchor.constraint(equalTo: tabBar.leadingAnchor),
             expenseView.heightAnchor.constraint(equalTo: self.tabBar.heightAnchor, constant: HomeViewController.Constants.headerHeight),
             expenseView.widthAnchor.constraint(equalTo: tabBar.widthAnchor),
