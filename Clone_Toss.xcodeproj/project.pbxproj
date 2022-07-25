@@ -10,7 +10,6 @@
 		2E0DF349288401B4009E78E6 /* SectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */; };
 		2E0DF34B28844545009E78E6 /* HomeViewController+CollectionViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */; };
 		2E0DF34D28845015009E78E6 /* ShowDetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */; };
-		2E65DA00288C1B82003ECD3C /* HomeViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E65D9FF288C1B82003ECD3C /* HomeViewLayout.swift */; };
 		2E6A957D287F0C3F00B91AFD /* AssetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */; };
 		2E6A957F2880464100B91AFD /* ExpenseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A957E2880464100B91AFD /* ExpenseHeader.swift */; };
 		2E6A95862881980800B91AFD /* HomeViewController+ScrollAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */; };
@@ -61,7 +60,6 @@
 		2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E0DF34A28844545009E78E6 /* HomeViewController+CollectionViewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+CollectionViewSection.swift"; sourceTree = "<group>"; };
 		2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailButton.swift; sourceTree = "<group>"; };
-		2E65D9FF288C1B82003ECD3C /* HomeViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewLayout.swift; sourceTree = "<group>"; };
 		2E6A957C287F0C3F00B91AFD /* AssetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetHeader.swift; sourceTree = "<group>"; };
 		2E6A957E2880464100B91AFD /* ExpenseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseHeader.swift; sourceTree = "<group>"; };
 		2E6A95852881980800B91AFD /* HomeViewController+ScrollAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+ScrollAnimation.swift"; sourceTree = "<group>"; };
@@ -203,7 +201,6 @@
 				2E6A958B2881B65900B91AFD /* CollectionView+Combine.swift */,
 				2E0DF348288401B4009E78E6 /* SectionBackgroundView.swift */,
 				2E0DF34C28845015009E78E6 /* ShowDetailButton.swift */,
-				2E65D9FF288C1B82003ECD3C /* HomeViewLayout.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -446,7 +443,6 @@
 				2E0DF34D28845015009E78E6 /* ShowDetailButton.swift in Sources */,
 				2E74FDF6287C670C0052C137 /* ViewController.swift in Sources */,
 				2E6A95882881991800B91AFD /* ExpenseBottomView.swift in Sources */,
-				2E65DA00288C1B82003ECD3C /* HomeViewLayout.swift in Sources */,
 				2E6A95862881980800B91AFD /* HomeViewController+ScrollAnimation.swift in Sources */,
 				2E6A958C2881B65900B91AFD /* CollectionView+Combine.swift in Sources */,
 				2E0DF34B28844545009E78E6 /* HomeViewController+CollectionViewSection.swift in Sources */,
