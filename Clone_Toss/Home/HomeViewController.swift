@@ -33,7 +33,7 @@ class HomeViewController: UINavigationController {
     enum Constants {
         static let interSectionSpacing: CGFloat = 16
         static let margin: CGFloat = 15
-        static let headerHeight: CGFloat = 50
+        static let headerHeight: CGFloat = 40
         static let cornerRaidus: CGFloat = 15
     }
     
@@ -199,6 +199,7 @@ extension HomeViewController {
 }
 
 extension HomeViewController: UICollectionViewDelegate {
+    // MARK: - custom background view 만드는 코드
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard expenseBackground == nil else { return }
         
@@ -210,7 +211,6 @@ extension HomeViewController: UICollectionViewDelegate {
     
         // headerHeight + cellHeight * 2
         let height = Constants.headerHeight + cell.frame.height * 2 + 20
-        
         
         expenseBackground = createExpenseBackground()
         guard let expenseBackground = expenseBackground else { return }
