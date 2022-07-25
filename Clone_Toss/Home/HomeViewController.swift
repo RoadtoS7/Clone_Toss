@@ -34,9 +34,14 @@ class HomeViewController: UINavigationController {
         static let interSectionSpacing: CGFloat = 16
         static let margin: CGFloat = 15
         static let headerHeight: CGFloat = 50
+        static let cornerRaidus: CGFloat = 15
     }
     
     var collectionView: UICollectionView!
+    var collectionViewHeight: CGFloat {
+        collectionView.frame.height
+    }
+    
     private var dataSource: DataSource!
     
     let button: ShowDetailButton = {
@@ -45,16 +50,26 @@ class HomeViewController: UINavigationController {
         return button
     }()
     
+    
+    var bottomExpenseView: UIView? {
+        let tabBarController = parent as? TabBarController
+        return tabBarController?.expenseView
+    }
+    
     var bottomExpenseViewHeight: CGFloat {
-        guard let tabBarController = parent as? TabBarController else {
+        guard let bottomExpenseView = bottomExpenseView else {
             return .zero
         }
-        return tabBarController.expenseView.frame.height
+        return bottomExpenseView.frame.height
     }
     
     var doingAnimation = false
     var cancellableBag = Set<AnyCancellable>()
-   
+    
+    var isExpenseViewHidden = false
+    
+    var expenseBackground: UIView?
+    var expenseBackgroundWidthConstraint: NSLayoutConstraint?
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -81,6 +96,7 @@ extension HomeViewController {
         collectionView.backgroundColor = UIColor.toss
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.bounces = false
+        collectionView.delegate = self
         
         view.addSubview(collectionView)
         
@@ -107,6 +123,7 @@ extension HomeViewController {
             switch sectionKind {
             case .bank:
                 section = self.bankSection()
+                section.decorationItems = [background]
             
             case .asset:
                 section = self.assetSection()
@@ -114,7 +131,6 @@ extension HomeViewController {
             
             case .expense:
                 section = self.expenseSection()
-                section.decorationItems = [background]
                 
             case .promotion:
                 section = self.promotionSection()
@@ -182,16 +198,44 @@ extension HomeViewController {
     }
 }
 
-// MARK: TabBarController의 하단 view appear/disapper 처리 메서드
-extension HomeViewController {
-    func showExpenseBottomView() {
-        guard let tabBarController = parent as? TabBarController else { return }
-        tabBarController.showExpenseView()
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard expenseBackground == nil else { return }
+        
+        let assetCellCount = collectionView.numberOfItems(inSection: SectionKind.asset.rawValue)
+        
+        guard indexPath.section == SectionKind.asset.rawValue,
+              indexPath.row == assetCellCount - 1
+        else { return }
+    
+        // headerHeight + cellHeight * 2
+        let height = Constants.headerHeight + cell.frame.height * 2 + 20
+        
+        
+        expenseBackground = createExpenseBackground()
+        guard let expenseBackground = expenseBackground else { return }
+        
+        expenseBackground.layer.zPosition = -1
+        collectionView.addSubview(expenseBackground)
+        expenseBackgroundWidthConstraint = expenseBackground.widthAnchor.constraint(equalToConstant: view.bounds.width)
+        
+        NSLayoutConstraint.activate([
+            expenseBackground.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            expenseBackgroundWidthConstraint!,
+            expenseBackground.topAnchor.constraint(equalTo: cell.bottomAnchor, constant: Constants.interSectionSpacing + 20),
+            expenseBackground.heightAnchor.constraint(equalToConstant: height)
+        ])
+        
+        collectionView.layoutIfNeeded()
     }
     
-    func closeExpenseBottomView() {
-        guard let tabBarController = parent as? TabBarController else { return }
-        tabBarController.closeExpenseView()
+    private func createExpenseBackground() -> UIView {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        view.layer.cornerRadius = Constants.cornerRaidus
+        view.clipsToBounds = true
+        return view
     }
 }
 

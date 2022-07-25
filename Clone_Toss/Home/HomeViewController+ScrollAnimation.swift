@@ -8,102 +8,58 @@
 import UIKit
 import Combine
 
-class ScaleCalculator {
-    static func xScaleFactor(initialFrame: CGRect, finalFrame: CGRect, presenting: Bool) -> CGFloat {
-        presenting ?
-        initialFrame.width / finalFrame.width :
-        finalFrame.width / initialFrame.width
-    }
-
-    static func yScaleFactor(initialFrame: CGRect, finalFrame: CGRect, presenting: Bool) -> CGFloat {
-        presenting ?
-          initialFrame.height / finalFrame.height :
-          finalFrame.height / initialFrame.height
-    }
-}
 
 extension HomeViewController {
     func detectScroll() {
-        let isDownScroll = collectionView.contentOffsetPublisher
-        // (beforebefore, before)
-            .scan((CGFloat.zero, CGFloat.zero), { prev, contentOffset in
-                let y = contentOffset.y
-                let beforeY = prev.1
-                return (beforeY, y)
-            }).flatMap({ beforeY, y in
-                Just(beforeY < y)
-            })
-        
         collectionView.contentOffsetPublisher
-            .zip(isDownScroll)
-            .filter({ (_, isDownScroll) in isDownScroll })
-            .filter { [weak self] offset, isDownScroll in
-                // MARK: expense background에 닿았는지 체크한다.
+            .sink { [weak self] contentOffset in
+                guard let self = self else { return }
                 let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
-                let headerOrigin = header?.frame.origin ?? .zero
+                let header = self.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
                 
-                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
+                guard let headerBottomY = header?.frame.maxY,
+                      self.bottomExpenseViewHeight != .zero
+                else { return }
                 
-                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
-                return scrolledLength >= headerOrigin.y
-            }.sink { _ in
-                self.closeExpenseBottomView()
+                let scrolledPosition = contentOffset.y + self.collectionViewHeight - self.bottomExpenseViewHeight - Constants.interSectionSpacing
+                let isHidden =  scrolledPosition >= headerBottomY
+                guard isHidden != self.isExpenseViewHidden else { return }
+                self.animateExpenseBottomView(toHidden: isHidden)
             }.store(in: &cancellableBag)
+    }
+    
+    
+    func animateExpenseBottomView(toHidden: Bool) {
+        self.isExpenseViewHidden = toHidden
         
-        collectionView.contentOffsetPublisher
-            .zip(isDownScroll)
-            .filter({ (_, isDownScroll) in isDownScroll == false })
-            .filter { [weak self] offset, isDownScroll in
-                // MARK: expense background에 닿았는지 체크한다.
-                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
-                let headerOrigin = header?.frame.origin ?? .zero
+        if toHidden {
+            self.bottomExpenseView?.isHidden = true
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
+                self.tabBarController?.tabBar.layer.cornerRadius = 20
+                self.tabBarController?.tabBar.layer.borderWidth = TabBarController.Constants.tabBarBorderWidth
+                self.expenseBackgroundWidthConstraint?.constant = self.view.bounds.width - Constants.margin
+                 * 2
                 
-                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
+                self.bottomExpenseView?.clipsToBounds = true
+                self.bottomExpenseView?.layer.borderWidth = 0.5
+                self.bottomExpenseView?.layer.cornerRadius = Constants.cornerRaidus
+                self.bottomExpenseView?.layer.borderColor = UIColor.lightGray.cgColor
                 
-                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
-                return scrolledLength <= headerOrigin.y
-            }.sink { _ in
-                self.showExpenseBottomView()
-            }.store(in: &cancellableBag)
-            
-//        collectionView.contentOffsetPublisher
-//            .zip(isDownScroll)
-//            .flatMap({  [weak self] (offset, isDownScroll) -> AnyPublisher<Bool, Never> in
-//                // MARK: expense background에 닿았는지 체크한다.
-//                let indexPath = IndexPath(row: 0, section: SectionKind.expense.rawValue)
-//                let header = self?.collectionView.supplementaryView(forElementKind: ExpenseHeader.elementKind, at: indexPath)
-//                let headerOrigin = header?.frame.origin ?? .zero
-//
-//                let collectionViewHeight = self?.collectionView.frame.height ?? .zero
-//
-//                let scrolledLength = offset.y + collectionViewHeight - (self?.bottomExpenseViewHeight ?? .zero)
-//
-//
-//                // MARK: Scroll Down
-//                if isDownScroll {
-//                    if scrolledLength >= headerOrigin.y {
-//                        return Just(isDownScroll).eraseToAnyPublisher()
-//                    }
-//                }
-//
-//
-//                // MARK: Scroll Up
-//                if isDownScroll == false {
-//                    if scrolledLength <= headerOrigin.y {
-//                        return Just(isDownScroll).eraseToAnyPublisher()
-//                    }
-//                }
-//                return Empty().eraseToAnyPublisher()
-//            })
-//            .sink { isDownScroll in
-//                print("isDownScroll: \(isDownScroll)")
-//                if isDownScroll {
-//                    self.closeExpenseBottomView()
-//                    return
-//                }
-//                self.showExpenseBottomView()
-//            }.store(in: &cancellableBag)
+                self.view.layoutIfNeeded()
+            }
+        }
+        else {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
+                self.tabBarController?.tabBar.layer.cornerRadius = 0
+                self.tabBarController?.tabBar.layer.borderWidth = 0
+
+                self.expenseBackgroundWidthConstraint?.constant = self.view.bounds.width
+                self.view.layoutIfNeeded()
+            } completion: { _ in
+                self.bottomExpenseView?.isHidden = false
+            }
+        }
+        
     }
 }
+
